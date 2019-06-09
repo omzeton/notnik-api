@@ -56,8 +56,13 @@ app.use("/journal", journalRoutes);
 app.use("/auth", authRoutes);
 
 app.use((error, req, res, next) => {
-  const newError = error.data[0];
-  console.log(newError);
+  let newError;
+  if (error.data) {
+    newError = error.data[0];
+  } else {
+    newError = error;
+  }
+  // const newError = error.data[0] || error;
   const status = newError.statusCode || 500;
   const message = newError.msg;
   res.status(status).json({ message: message });
