@@ -176,6 +176,22 @@ exports.deleteEntry = async (req, res, next) => {
   }
 };
 
+exports.postFontSize = async (req, res, next) => {
+  try {
+    const newFontSize = req.body.newFontSize;
+    const userId = req.body.userId;
+    const user = await User.findById(userId);
+    user.settings.fontSize = newFontSize;
+    await user.save();
+    res.status(200).json({ message: "Font size updated successfully!" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 const clearImage = filePath => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, err => console.log(err));

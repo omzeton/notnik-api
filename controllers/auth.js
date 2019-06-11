@@ -22,7 +22,7 @@ exports.signup = async (req, res, next) => {
       password: hashedPw,
       posts: [],
       settings: {
-        fontSize: "1",
+        fontSize: "0.9rem",
         menuPosition: "left"
       }
     });
