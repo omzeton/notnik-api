@@ -20,10 +20,20 @@ exports.signup = async (req, res, next) => {
     const user = new User({
       email: email,
       password: hashedPw,
-      posts: []
+      posts: [],
+      settings: {
+        fontSize: "1",
+        menuPosition: "left"
+      }
     });
     const result = await user.save();
-    res.status(201).json({ message: "New user created", userId: result });
+    res
+      .status(201)
+      .json({
+        message: "New user created",
+        userId: result._id.toString(),
+        userSettings: user.settings
+      });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -57,7 +67,12 @@ exports.login = async (req, res, next) => {
       "iloveuior",
       { expiresIn: "1d" }
     );
-    res.status(200).json({ token: token, userId: user._id.toString() });
+    console.log(user.settings);
+    res.status(200).json({
+      token: token,
+      userId: user._id.toString(),
+      userSettings: user.settings
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
