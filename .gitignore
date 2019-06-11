@@ -1,4 +1,4 @@
-/images
-/node_modules
+node_modules
 nodemon.json
 mongodb.password
+access.log

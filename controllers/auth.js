@@ -64,7 +64,7 @@ exports.login = async (req, res, next) => {
         email: user.email,
         userId: user._id.toString()
       },
-      "iloveuior",
+      process.env.TOKEN_SECRET,
       { expiresIn: "1d" }
     );
     res.status(200).json({
