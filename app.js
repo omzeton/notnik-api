@@ -2,17 +2,21 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
 }@cluster0-p7rod.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true`;
 
+const fs = require("fs");
 const mongoose = require("mongoose");
 const express = require("express");
 const multer = require("multer");
 const uuidv4 = require("uuid/v4");
 const bodyParser = require("body-parser");
 const path = require("path");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
 const journalRoutes = require("./routes/journal.js");
 const authRoutes = require("./routes/auth.js");
 
 const app = express();
+
 
 const fileStorage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -35,6 +39,14 @@ const fileFilter = (req, file, cb) => {
     cb(null, false);
   }
 };
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+
+app.use(helmet());
+app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use(bodyParser.json());
 app.use(
@@ -62,7 +74,6 @@ app.use((error, req, res, next) => {
   } else {
     newError = error;
   }
-  // const newError = error.data[0] || error;
   const status = newError.statusCode || 500;
   const message = newError.msg;
   res.status(status).json({ message: message });
@@ -72,7 +83,7 @@ mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => {
     console.log("Systems online.");
-    app.listen(8080);
+    app.listen(process.env.PORT || 3000);
   })
   .catch(err => {
     console.log(err);
