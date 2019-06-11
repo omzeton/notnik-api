@@ -55,4 +55,6 @@ router.delete("/entry/:entryId", journalController.deleteEntry);
 
 router.post("/font-size", journalController.postFontSize);
 
+router.post("/menu-position", journalController.postMenuPosition);
+
 module.exports = router;

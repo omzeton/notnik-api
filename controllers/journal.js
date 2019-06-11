@@ -192,6 +192,22 @@ exports.postFontSize = async (req, res, next) => {
   }
 };
 
+exports.postMenuPosition = async (req, res, next) => {
+  try {
+    const newMenuPos = req.body.newMenuPosition;
+    const userId = req.body.userId;
+    const user = await User.findById(userId);
+    user.settings.menuPosition = newMenuPos;
+    await user.save();
+    res.status(200).json({ message: "Menu position updated successfully!" });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+};
+
 const clearImage = filePath => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, err => console.log(err));

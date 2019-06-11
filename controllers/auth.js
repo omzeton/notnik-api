@@ -67,7 +67,6 @@ exports.login = async (req, res, next) => {
       "iloveuior",
       { expiresIn: "1d" }
     );
-    console.log(user.settings);
     res.status(200).json({
       token: token,
       userId: user._id.toString(),
