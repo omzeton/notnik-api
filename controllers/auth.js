@@ -109,7 +109,7 @@ exports.changePassword = async (req, res, next) => {
 
 exports.deleteAccount = async (req, res, next) => {
   try {
-    const uId = req.body.uId;
+    const uId = req.userId;
     await User.findByIdAndDelete(uId);
     const entries = await Entry.find({ uId: uId });
     if (entries) {

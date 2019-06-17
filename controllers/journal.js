@@ -38,7 +38,7 @@ exports.getEntries = (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  Entry.find({ uId: req.body.uId })
+  Entry.find({ uId: req.userId })
     .then(entries => {
       res.status(200).json({
         message: "Entries fetched successfully!",
