@@ -26,14 +26,21 @@ exports.signup = async (req, res, next) => {
         menuPosition: "left"
       }
     });
+    const token = jwt.sign(
+      {
+        email: user.email,
+        userId: user._id.toString()
+      },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "1d" }
+    );
     const result = await user.save();
-    res
-      .status(201)
-      .json({
-        message: "New user created",
-        userId: result._id.toString(),
-        userSettings: user.settings
-      });
+    res.status(201).json({
+      message: "New user created",
+      userId: result._id.toString(),
+      userSettings: user.settings,
+      token: token
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
