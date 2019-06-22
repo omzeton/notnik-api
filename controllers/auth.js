@@ -116,6 +116,7 @@ exports.changePassword = async (req, res, next) => {
 
 exports.deleteAccount = async (req, res, next) => {
   try {
+    console.log(req.userId);
     const uId = req.userId;
     await User.findByIdAndDelete(uId);
     const entries = await Entry.find({ uId: uId });
