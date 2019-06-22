@@ -26,19 +26,19 @@ exports.signup = async (req, res, next) => {
         menuPosition: "left"
       }
     });
+    const result = await user.save();
     const token = jwt.sign(
       {
-        email: user.email,
-        userId: user._id.toString()
+        email: result.email,
+        userId: result._id.toString()
       },
       process.env.TOKEN_SECRET,
       { expiresIn: "1d" }
     );
-    const result = await user.save();
     res.status(201).json({
       message: "New user created",
       userId: result._id.toString(),
-      userSettings: user.settings,
+      userSettings: result.settings,
       token: token
     });
   } catch (err) {
